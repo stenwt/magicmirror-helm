@@ -37,17 +37,19 @@ spec:
       - name: install-modules
         configMap:
           name: {{ template "magicmirror.fullname" . }}-install-modules
+          defaultMode: 0775
       initContainers:
       - name: install-modules
         image: {{ .Values.image }}
         command: ["sh",
           "-c",
-          "cp /tmp/scripts/install_modules.sh /opt/magic_mirror/install_modules.sh &&
-          chmod 0775 /opt/magic_mirror/install_modules.sh &&
-          /opt/magic_mirror/install_modules.sh && pwd && ls -lah"]
+          "/opt/magic_mirror/install_modules.sh && pwd && ls -lah"]
         volumeMounts:
         - mountPath: /opt/magic_mirror/modules
           name: modules
+        - mountPath: /opt/magic_mirror/install_modules.sh
+          name: install-modules
+          subPath: install_modules.sh
       {{- end }}
       containers:
       - image: {{ .Values.image }}
@@ -58,24 +60,24 @@ spec:
           - npm
           - run
           - server
-        # readinessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: {{ .Values.service.port }}
-        #   failureThreshold: 5
-        #   initialDelaySeconds: 3
-        #   periodSeconds: 10
-        #   successThreshold: 1
-        #   timeoutSeconds: 2
-        # livenessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: {{ .Values.service.port }}
-        #   failureThreshold: 5
-        #   initialDelaySeconds: 3
-        #   periodSeconds: 10
-        #   successThreshold: 1
-        #   timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.service.port }}
+          failureThreshold: 5
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 2
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.service.port }}
+          failureThreshold: 5
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 2
         volumeMounts:
         - mountPath: /opt/magic_mirror/config/config.js
           name: config

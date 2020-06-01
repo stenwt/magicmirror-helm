@@ -1,8 +1,9 @@
-subdomain
-rbac needed?
+subdomain: no success with ip-address
+rbac needed: yes, may strip down
 modules
   a) initContainer
   b) pvc
 securitycontext
 npm install (modules)
 restart bei configmap change
+configmap with config.js: may move to volume (emptyDir) for editing
