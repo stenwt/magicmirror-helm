@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "magicmirror.fullname" . }}
+  labels:
+    app: {{ template "magicmirror.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  replicas: {{ default 1 .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "magicmirror.name" . }}
+      release: {{ .Release.Name }}
+  {{- if .Values.deploymentStrategy }}
+  strategy:
+{{ toYaml .Values.deploymentStrategy | indent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "magicmirror.name" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name | quote }}
+        heritage: {{ .Release.Service | quote }}
+    spec:
+      serviceAccountName: {{ template "magicmirror.fullname" . }}
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: modules
+        emptyDir: {}
+      - name: config
+        configMap:
+          name: {{ template "magicmirror.fullname" . }}-config
+      {{- if .Values.modules.install }}
+      - name: install-modules
+        configMap:
+          name: {{ template "magicmirror.fullname" . }}-install-modules
+      initContainers:
+      - name: install-modules
+        image: {{ .Values.image }}
+        command: ["sh",
+          "-c",
+          "cp /tmp/scripts/install_modules.sh /opt/magic_mirror/install_modules.sh &&
+          chmod 0775 /opt/magic_mirror/install_modules.sh &&
+          /opt/magic_mirror/install_modules.sh && pwd && ls -lah"]
+        volumeMounts:
+        - mountPath: /opt/magic_mirror/modules
+          name: modules
+      {{- end }}
+      containers:
+      - image: {{ .Values.image }}
+        name: {{ template "magicmirror.fullname" . }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        command:
+          - /opt/magic_mirror/entrypoint.sh
+          - npm
+          - run
+          - server
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: {{ .Values.service.port }}
+        #   failureThreshold: 5
+        #   initialDelaySeconds: 3
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   timeoutSeconds: 2
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: {{ .Values.service.port }}
+        #   failureThreshold: 5
+        #   initialDelaySeconds: 3
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   timeoutSeconds: 2
+        volumeMounts:
+        - mountPath: /opt/magic_mirror/config/config.js
+          name: config
+          subPath: config.js
+        - mountPath: /opt/magic_mirror/modules
+          name: modules
+        {{- if .Values.modules.install }}
+        - mountPath: /tmp/scripts/
+          name: install-modules
+        {{- end }}
+        ports:
+        - name: web-port
+          containerPort: {{ .Values.service.port }}
+          protocol: TCP

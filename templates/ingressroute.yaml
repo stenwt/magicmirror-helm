@@ -1,0 +1,34 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ template "magicmirror.fullname" . }}-strip
+spec:
+  stripPrefix:
+    prefixes:
+      - {{ .Values.ingress.path }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ template "magicmirror.fullname" . }}
+  labels:
+    app: {{ template "magicmirror.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  entryPoints:
+    # - websecure
+    - web
+  routes:
+  - match: PathPrefix(`{{ .Values.ingress.path }}`)
+    kind: Rule
+    services:
+    - name: {{ template "magicmirror.fullname" . }}
+      port: {{ .Values.service.port }}
+    middlewares:
+    - name: {{ template "magicmirror.fullname" . }}-strip
+  # tls:
+  #   stores: default
+{{- end }}

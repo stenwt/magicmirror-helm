@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "magicmirror.fullname" . }}-config
+  labels:
+    app: {{ template "magicmirror.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+data:
+  config.js: |-
+{{ tpl (.Files.Get "data/config.js") . | indent 4 }}

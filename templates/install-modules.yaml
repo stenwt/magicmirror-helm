@@ -1,0 +1,18 @@
+{{- if .Values.modules.install }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "magicmirror.fullname" . }}-install-modules
+  labels:
+    app: {{ template "magicmirror.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  install_modules.sh: |-
+    cd /opt/magic_mirror/modules
+    {{ range $index, $val := .Values.modules.install }}echo {{ $val | quote }} >> modules.txt
+    {{ end }}
+    cat modules.txt | xargs -n 1 -P 8 git clone
+    rm modules.txt
+{{- end }}
