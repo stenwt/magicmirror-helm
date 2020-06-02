@@ -18,7 +18,7 @@ ingress:
 # For example:
 modules:
  install:
-   - "https://github.com/ianperrin/MMM-Strava"
-#    - "https://github.com/Jopyth/MMM-Remote-Control"
+   - "https://github.com/jclarke0000/MMM-DarkSkyForecast"
+   - "https://github.com/sdetweil/MyCovid19"
 # modules:
 #   install: []

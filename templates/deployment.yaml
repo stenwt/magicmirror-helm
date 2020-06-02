@@ -43,7 +43,7 @@ spec:
         image: {{ .Values.image }}
         command: ["sh",
           "-c",
-          "/opt/magic_mirror/install_modules.sh && pwd && ls -lah"]
+          "/opt/magic_mirror/install_modules.sh"]
         volumeMounts:
         - mountPath: /opt/magic_mirror/modules
           name: modules

@@ -5,5 +5,6 @@ modules
   b) pvc
 securitycontext
 npm install (modules)
-restart bei configmap change
+restart bei configmap change sowie install-modules change
 configmap with config.js: may move to volume (emptyDir) for editing
+karsten13/magicmirror develop funzt net
