@@ -1,6 +1,11 @@
 image: karsten13/magicmirror:develop
 imagePullPolicy: Always
 
+replicaCount: 1
+
+ # This will use the default deployment strategy unless it is overriden
+deploymentStrategy: {}
+
 service:
   type: ClusterIP
 #  type: NodePort
@@ -22,3 +27,13 @@ modules:
    - "https://github.com/sdetweil/MyCovid19"
 # modules:
 #   install: []
+
+# Environment variables to attach to the pods
+env:
+  - name: TZ
+    value: Europe/Berlin
+
+
+secrets: {}
+# specify secrets (better in own file)
+#   darkSkyApi: XXXXXXXXXXXXXXXXXXXXXX

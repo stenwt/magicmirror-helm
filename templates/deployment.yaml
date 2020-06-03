@@ -8,7 +8,7 @@ metadata:
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
-  replicas: {{ default 1 .Values.replicas }}
+  replicas: {{ default 1 .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ template "magicmirror.name" . }}
@@ -60,6 +60,10 @@ spec:
           - npm
           - run
           - server
+        env:
+          {{- with .Values.env }}
+          {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
         readinessProbe:
           httpGet:
             path: /
@@ -92,3 +96,19 @@ spec:
         - name: web-port
           containerPort: {{ .Values.service.port }}
           protocol: TCP
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
+    {{- if .Values.hostAliases }}
+      hostAliases:
+{{ toYaml .Values.hostAliases | indent 8 }}
+    {{- end }}
+    {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+    {{- end }}
+    {{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+    {{- end }}
