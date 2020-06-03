@@ -10,17 +10,17 @@
 
 var config = {
 	address: "0.0.0.0", // Address to listen on, can be:
-	// - "localhost", "127.0.0.1", "::1" to listen on loopback interface
-	// - another specific IPv4/6 to listen on a specific interface
-	// - "0.0.0.0", "::" to listen on any interface
-	// Default, when address config is left out or empty, is "localhost"
+	                      // - "localhost", "127.0.0.1", "::1" to listen on loopback interface
+	                      // - another specific IPv4/6 to listen on a specific interface
+	                      // - "0.0.0.0", "::" to listen on any interface
+	                      // Default, when address config is left out or empty, is "localhost"
 	port: 8080,
 	basePath: "{{ .Values.ingress.path }}/",
 	ipWhitelist: [], // Set [] to allow all IP addresses
-	// or add a specific IPv4 of 192.168.1.5 :
-	// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.1.5"],
-	// or IPv4 range of 192.168.3.0 --> 192.168.3.15 use CIDR format :
-	// ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.3.0/28"],
+	                                                       // or add a specific IPv4 of 192.168.1.5 :
+	                                                       // ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.1.5"],
+	                                                       // or IPv4 range of 192.168.3.0 --> 192.168.3.15 use CIDR format :
+	                                                       // ["127.0.0.1", "::ffff:127.0.0.1", "::1", "::ffff:192.168.3.0/28"],
 
 	useHttps: false, 		// Support HTTPS or not, default "false" will use HTTP
 	httpsPrivateKey: "", 	// HTTPS private key path, only require when useHttps is true
@@ -30,46 +30,12 @@ var config = {
 	timeFormat: 24,
 	units: "metric",
 	// serverOnly:  true/false/"local" ,
-	// local for armv6l processors, default
-	//   starts serveronly and then starts chrome browser
-	// false, default for all  NON-armv6l devices
-	// true, force serveronly mode, because you want to.. no UI on this device
+			     // local for armv6l processors, default
+			     //   starts serveronly and then starts chrome browser
+			     // false, default for all  NON-armv6l devices
+			     // true, force serveronly mode, because you want to.. no UI on this device
 
 	modules: [
-		{
-			module: 'MMM-DarkSkyForecast',
-			header: 'Wetter',
-			position: 'top_right',
-			config: {
-				apikey: '{{ .Values.secrets.darkSkyApi }}',
-				latitude: '50.17659',
-				longitude: '8.62685',
-				showHourlyForecast: false,
-				colored: false,
-				label_days: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-				iconset: '3c'
-			}
-		},
-		{
-			module: "MyCovid19",
-			position: "bottom_center",
-			config: {
-				countries: ["Germany", "Italy", "Spain", "France", "USA", "China"],
-				// line colors can be any definition of color either a name ,or a hex string
-				// one per country above, used in order,
-				line_colors: ['red', 'white', 'green', 'yellow', 'blue', 'gray'],
-				//
-				chart_type: "cumulative_deaths",  // or "cumulative deaths"
-				chart_title: "Cumulative Deaths", // however u want to label
-				// the vertical steps on the chart.. how tall u want it to be and how mant increments
-				ranges: { min: 0, max: 8000, stepSize: 10000 },
-				// size of the chart in pixels
-				width: 600,
-				height: 500,
-				// only used if we need to debug something
-				debug: false,
-			}
-		},
 		{
 			module: "alert",
 		},
@@ -89,8 +55,7 @@ var config = {
 				calendars: [
 					{
 						symbol: "calendar-check",
-						url: "webcal://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"
-					}
+						url: "webcal://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"					}
 				]
 			}
 		},
@@ -138,4 +103,4 @@ var config = {
 };
 
 /*************** DO NOT EDIT THE LINE BELOW ***************/
-if (typeof module !== "undefined") { module.exports = config; }
+if (typeof module !== "undefined") {module.exports = config;}

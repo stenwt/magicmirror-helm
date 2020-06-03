@@ -1,4 +1,4 @@
-image: karsten13/magicmirror:latest
+image: karsten13/magicmirror:develop
 imagePullPolicy: Always
 
 service:

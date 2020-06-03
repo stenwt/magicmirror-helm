@@ -13,9 +13,9 @@ data:
     cd /opt/magic_mirror/modules
     {{ range $index, $val := .Values.modules.install }}echo {{ $val | quote }} >> modules.txt
     {{ end }}
-    cat modules.txt | xargs -n 1 -P 8 git clone
     while read mod; do
-      echo "$mod"
+      echo installig "$mod"
+      git clone "$mod"
       folder=$(echo $mod | sed -r 's|.*\/(.*)|\1|g' | xargs)
       cd $folder
       npm install --only=production
