@@ -17,14 +17,15 @@ service:
 ingress:
   enabled: true
   path: "/mm"
+  tls: false
 #  subdomain: ""
 
 # List of modules to install.
 # For example:
 modules:
- install:
-   - "https://github.com/jclarke0000/MMM-DarkSkyForecast"
-   - "https://github.com/sdetweil/MyCovid19"
+  install:
+    - "https://github.com/jclarke0000/MMM-DarkSkyForecast"
+    - "https://github.com/sdetweil/MyCovid19"
 # modules:
 #   install: []
 

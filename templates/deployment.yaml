@@ -24,6 +24,9 @@ spec:
         chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         release: {{ .Release.Name | quote }}
         heritage: {{ .Release.Service | quote }}
+      annotations:
+        checksum/modules: {{ include (print $.Template.BasePath "/install-modules.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ template "magicmirror.fullname" . }}
       terminationGracePeriodSeconds: 60
@@ -86,6 +89,9 @@ spec:
         - mountPath: /opt/magic_mirror/config/config.js
           name: config
           subPath: config.js
+        - mountPath: /opt/magic_mirror/css/custom.css
+          name: config
+          subPath: custom.css
         - mountPath: /opt/magic_mirror/modules
           name: modules
         {{- if .Values.modules.install }}

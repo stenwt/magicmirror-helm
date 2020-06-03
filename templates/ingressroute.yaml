@@ -19,8 +19,11 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   entryPoints:
-    # - websecure
+  {{- if .Values.ingress.tls }}
+    - websecure
+  {{- else }}
     - web
+  {{- end }}
   routes:
   - match: PathPrefix(`{{ .Values.ingress.path }}`)
     kind: Rule
@@ -29,6 +32,8 @@ spec:
       port: {{ .Values.service.port }}
     middlewares:
     - name: {{ template "magicmirror.fullname" . }}-strip
-  # tls:
-  #   stores: default
+  {{- if .Values.ingress.tls }}
+  tls:
+    stores: default
+  {{- end }}
 {{- end }}

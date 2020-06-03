@@ -9,4 +9,6 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 data:
   config.js: |-
-{{ tpl (.Files.Get "data/config.js") . | indent 4 }}
+{{ tpl (.Files.Get "config/config.js") . | indent 4 }}
+  custom.css: |-
+{{ tpl (.Files.Get "css/custom.css") . | indent 4 }}
