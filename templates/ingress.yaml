@@ -1,0 +1,38 @@
+{{- if and (.Values.ingress.enabled) (eq .Values.ingress.type "nginx") }}
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" }}
+apiVersion: networking.k8s.io/v1beta1
+{{ else }}
+apiVersion: extensions/v1beta1
+{{ end }}
+kind: Ingress
+metadata:
+  name: {{ template "magicmirror.fullname" . }}
+  labels:
+    app: {{ template "magicmirror.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- if .Values.ingress.labels }}
+{{ .Values.ingress.labels | toYaml | trimSuffix "\n"| indent 4 -}}
+{{- end}}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+{{- if .Values.ingress.annotations}}
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+{{- end }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.hostname }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.path}}/(.*)
+            backend:
+              serviceName: {{ template "magicmirror.fullname" . }}
+              servicePort: {{ .Values.service.port }}
+  {{- if .Values.ingress.tls }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+  {{- end }}
+{{- end }}

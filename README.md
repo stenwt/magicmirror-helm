@@ -49,6 +49,7 @@ The following table lists the configurable parameters of the MagicMirror chart a
 | `image`                               | image with tag                                                               | `karsten13/magicmirror:develop`                |
 | `imagePullPolicy`                     | Image pull policy                                                            | `Always`                                       |
 | `ingress.enabled`                     | Flag for enabling ingress                                                    | false                                          |
+| `ingress.type`                        | traefik or nginx                                                             | `traefik`                                      |
 | `ingress.tls`                         | Flag for enabling tls                                                        | false                                          |
 | `ingress.path`                        | subPath running MagicMirror                                                  | `/mm`                                          |
 | `service.type`                        | service type                                                                 | `ClusterIP`                                    |
@@ -59,7 +60,8 @@ The following table lists the configurable parameters of the MagicMirror chart a
 
 For overriding variables see: [Customizing the chart](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing)
 
-The current setup uses [traefik](https://github.com/containous/traefik-helm-chart) as ingress (definded in `ingressroute.yaml`), a "normal" ingress definition will come soon.
+The current setup uses [traefik](https://github.com/containous/traefik-helm-chart) as ingress, for using nginx-ingress you have to change `ingress.type`.
+You can also run without ingress, the you have to disable ingress (`ingress.enabled=false`) and setup the service as `LoadBalancer`, see example in `values.yaml`.
 
 # MagicMirror configuration: Config, Modules, and custom CSS
 

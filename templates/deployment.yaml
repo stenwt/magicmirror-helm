@@ -99,7 +99,7 @@ spec:
           name: install-modules
         {{- end }}
         ports:
-        - name: web-port
+        - name: http
           containerPort: {{ .Values.service.port }}
           protocol: TCP
     {{- if .Values.nodeSelector }}

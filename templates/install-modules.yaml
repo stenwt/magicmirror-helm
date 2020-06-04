@@ -18,7 +18,7 @@ data:
       git clone "$mod"
       folder=$(echo $mod | sed -r 's|.*\/(.*)|\1|g' | xargs)
       cd $folder
-      npm install --only=production
+      npm install --only=production || true
       cd ..
     done < modules.txt
     rm modules.txt

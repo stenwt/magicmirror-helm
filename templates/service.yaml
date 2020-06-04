@@ -19,9 +19,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: web-port
+    - name: http
       port: {{ .Values.service.port }}
-      targetPort: web-port
+      targetPort: http
       protocol: TCP
 {{ if .Values.service.nodePort}}
       nodePort: {{ .Values.service.nodePort }}
@@ -29,3 +29,18 @@ spec:
   selector:
     app: {{ template "magicmirror.name" . }}
     release: {{ .Release.Name }}
+  {{- if eq .Values.service.type "LoadBalancer"}}
+  {{- if .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{- range .Values.service.loadBalancerSourceRanges }}
+  - {{ . }}
+  {{- end }}
+  {{- end -}}
+  {{- if .Values.service.loadBalancerIP}}
+  loadBalancerIP: {{.Values.service.loadBalancerIP}}
+  {{- end }}
+  {{- with .Values.service.externalIPs }}
+  externalIPs:
+  {{- toYaml . | nindent 2 }}
+  {{- end -}}
+  {{- end -}}

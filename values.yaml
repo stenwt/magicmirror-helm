@@ -3,22 +3,28 @@ imagePullPolicy: Always
 
 replicaCount: 1
 
- # This will use the default deployment strategy unless it is overriden
+# This will use the default deployment strategy unless it is overriden
 deploymentStrategy: {}
+
+# if running without ingress:
+# run service as loadbalancer, your can access your MagicMirror under 192.168.0.38:8080
+# service:
+#   type: LoadBalancer
+#   port: 8080
+#   externalIPs:
+#     - 192.168.0.38
 
 service:
   type: ClusterIP
-#  type: NodePort
-#  type: LoadBalancer
   port: 8080
-#  nodePort: 31888
-#  externalIP: 192.168.0.38
 
 ingress:
+  # type: "nginx"
+  type: "traefik"
   enabled: true
+  hostname: ""
   path: "/mm"
   tls: false
-#  subdomain: ""
 
 # List of modules to install.
 # For example:
