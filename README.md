@@ -31,8 +31,7 @@ $ cd magicmirror-helm
 $ helm upgrade magicmirror -i .
 ```
 
-The above command deploys MagicMirror on the Kubernetes cluster in a sample configuration.
-It contains 2 foreign modules as example, [MyCovid19](https://github.com/sdetweil/MyCovid19) will run out of the box, [MMM-DarkSkyForecast](https://github.com/jclarke0000/MMM-DarkSkyForecast) needs an api key (without it remains in `loading ...` state).
+The above command deploys MagicMirror on the Kubernetes cluster in a default configuration (with default modules).
 
 # Uninstalling the chart
 
@@ -64,7 +63,8 @@ The following table lists the configurable parameters of the MagicMirror chart a
 | `service.type`                        | service type                                                                 | `ClusterIP`                                    |
 | `service.port`                        | service port                                                                 | `8080`                                         |
 | `env`                                 | list of environment variables                                                | `TZ`                                           |
-| `modules.install`                     | list of (foreign) modules to install                                         | `MyCovid19` and `MMM-DarkSkyForecast`          |
+| `modules.install`                     | list of (foreign) modules to install                                         | `[]`          |
+| `config.file`                         | location of `config.js` file                                                 | `config/config.js`                             |
 
 
 For overriding variables see: [Customizing the chart](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing)
@@ -78,6 +78,10 @@ With the default setup your MagicMirror ist running under `http://<your-ip-addre
 The subfolder `config` contains the `config.js`, you find more information [here](https://docs.magicmirror.builders/getting-started/configuration.html#general).
 
 Foreign modules are installed by editing the `modules.install` section in `values.yaml`, the default modules are described [here](https://docs.magicmirror.builders/modules/introduction.html).
+
+An example with foreign modules is provided in the `example.yaml`. It contains 2 foreign modules, [MyCovid19](https://github.com/sdetweil/MyCovid19) will run out of the box, [MMM-DarkSkyForecast](https://github.com/jclarke0000/MMM-DarkSkyForecast) needs an api key (without it remains in `loading ...` state). You find a corresponding config in `config/config.js.example`.
+
+For starting with this example use `helm upgrade magicmirror -i -f example.yaml .`.
 
 The subfolder `css` contains the `custom.css` file, which you can use to override your modules' appearance. CSS basics are documented
 [here](https://forum.magicmirror.builders/topic/6808/css-101-getting-started-with-css-and-understanding-how-css-works), among many other places.

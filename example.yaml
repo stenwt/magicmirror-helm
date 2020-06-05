@@ -1,0 +1,12 @@
+config:
+  file: "config/config.js.example"
+
+# List of modules to install.
+# For example:
+modules:
+  install:
+    - "https://github.com/jclarke0000/MMM-DarkSkyForecast"
+    - "https://github.com/sdetweil/MyCovid19"
+
+secrets:
+  darkSkyApi: replace-me-with-real-api-key
