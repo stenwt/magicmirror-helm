@@ -33,7 +33,12 @@ spec:
 {{ toYaml .Values.securityContext | indent 8 }}
       volumes:
       - name: modules
+        {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ template "magicmirror.fullname" . }}{{- end }}
+        {{- else }}
         emptyDir: {}
+        {{- end  }}
       - name: config
         configMap:
           name: {{ template "magicmirror.fullname" . }}-config

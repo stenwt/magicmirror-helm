@@ -53,7 +53,7 @@ The following table lists the configurable parameters of the MagicMirror chart a
 | ------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------- |
 | `replicaCount`                        | Number of replicas deployed                                                  | `1`                                            |
 | `deploymentStrategy`                  | Deployment strategy                                                          | `{}`                                           |
-| `image`                               | image with tag                                                               | `karsten13/magicmirror:alpine`                |
+| `image`                               | image with tag                                                               | `karsten13/magicmirror:alpine`                 |
 | `imagePullPolicy`                     | Image pull policy                                                            | `Always`                                       |
 | `ingress.enabled`                     | Flag for enabling ingress                                                    | false                                          |
 | `ingress.type`                        | traefik or nginx                                                             | `traefik`                                      |
@@ -63,9 +63,9 @@ The following table lists the configurable parameters of the MagicMirror chart a
 | `service.type`                        | service type                                                                 | `ClusterIP`                                    |
 | `service.port`                        | service port                                                                 | `8080`                                         |
 | `env`                                 | list of environment variables                                                | `TZ`                                           |
-| `modules.install`                     | list of (foreign) modules to install                                         | `[]`          |
+| `modules.install`                     | list of (foreign) modules to install                                         | `[]`                                           |
 | `config.file`                         | location of `config.js` file                                                 | `config/config.js`                             |
-
+| `persistence.enabled`                 | enables persistent volume for modules                                        | false                                          |
 
 For overriding variables see: [Customizing the chart](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing)
 
@@ -73,9 +73,12 @@ The current setup uses [traefik](https://github.com/containous/traefik-helm-char
 You can also run without ingress, then you have to disable ingress (`ingress.enabled=false`) and setup the service as `LoadBalancer`, see example in `values.yaml`.
 With the default setup your MagicMirror ist running under `http://<your-ip-address-or-hostname>/mm/`.
 
-# MagicMirror configuration: Config, Modules, and custom CSS
+# MagicMirror configuration: Config, custom CSS and Modules
 
 The subfolder `config` contains the `config.js`, you find more information [here](https://docs.magicmirror.builders/getting-started/configuration.html#general).
+
+The subfolder `css` contains the `custom.css` file, which you can use to override your modules' appearance. CSS basics are documented
+[here](https://forum.magicmirror.builders/topic/6808/css-101-getting-started-with-css-and-understanding-how-css-works), among many other places.
 
 Foreign modules are installed by editing the `modules.install` section in `values.yaml`, the default modules are described [here](https://docs.magicmirror.builders/modules/introduction.html).
 
@@ -83,5 +86,7 @@ An example with foreign modules is provided in the `example.yaml`. It contains 2
 
 For starting with this example use `helm upgrade magicmirror -i -f example.yaml .`.
 
-The subfolder `css` contains the `custom.css` file, which you can use to override your modules' appearance. CSS basics are documented
-[here](https://forum.magicmirror.builders/topic/6808/css-101-getting-started-with-css-and-understanding-how-css-works), among many other places.
+# Persistence for Modules
+
+The above approach of installing modules does the install on every start, so with every start a `git clone` and `npm install` is run for every module. So you have always the newest versions of the modules, but the start needs additional time.
+If you want to maintain the modules yourself on a persistent volume, you can use the `persistence` section in the `values.yaml`.

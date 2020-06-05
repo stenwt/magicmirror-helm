@@ -1,0 +1,32 @@
+{{- if and (.Values.persistence.enabled) (.Values.persistence.hostPath) }}
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ template "magicmirror.fullname" . }}
+  labels:
+    app: {{ template "magicmirror.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+{{ if .Values.persistence.annotations}}
+  annotations:
+    {{- range $key, $value := .Values.persistence.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+{{- end }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode | quote }}
+  persistentVolumeReclaimPolicy: {{ .Values.persistence.persistentVolumeReclaimPolicy }}
+  capacity:
+    storage: {{ .Values.persistence.size | quote }}
+  hostPath:
+    path: {{ .Values.persistence.hostPath | quote }}
+{{- if .Values.persistence.storageClass }}
+{{- if (eq "-" .Values.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end }}

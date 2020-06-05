@@ -49,6 +49,25 @@ env:
   - name: TZ
     value: Europe/Berlin
 
+persistence:
+  enabled: false
+  ## Set annotations on pvc
+  annotations: {}
+  ## Specify an existing volume claim instead of creating a new one.
+  ## When using this option all following options like storageClass, accessMode and size are ignored.
+  # existingClaim:
+
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass:
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  # hostPath: /home
+  # persistentVolumeReclaimPolicy: Recycle
 
 secrets: {}
 # specify secrets (better in own file)
