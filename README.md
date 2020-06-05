@@ -53,7 +53,7 @@ The following table lists the configurable parameters of the MagicMirror chart a
 | ------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------- |
 | `replicaCount`                        | Number of replicas deployed                                                  | `1`                                            |
 | `deploymentStrategy`                  | Deployment strategy                                                          | `{}`                                           |
-| `image`                               | image with tag                                                               | `karsten13/magicmirror:develop`                |
+| `image`                               | image with tag                                                               | `karsten13/magicmirror:alpine`                |
 | `imagePullPolicy`                     | Image pull policy                                                            | `Always`                                       |
 | `ingress.enabled`                     | Flag for enabling ingress                                                    | false                                          |
 | `ingress.type`                        | traefik or nginx                                                             | `traefik`                                      |

@@ -25,7 +25,11 @@ spec:
     - web
   {{- end }}
   routes:
+  {{- if .Values.ingress.hostname }}
   - match: Host(`{{ .Values.ingress.hostname }}`) && PathPrefix(`{{ .Values.ingress.path }}`)
+  {{- else }}
+  - match: PathPrefix(`{{ .Values.ingress.path }}`)
+  {{- end }}
     kind: Rule
     services:
     - name: {{ template "magicmirror.fullname" . }}
