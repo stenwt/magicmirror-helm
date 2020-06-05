@@ -8,6 +8,14 @@ This helm chart bootstraps a MagicMirror instance.
 
 > 👉 The project is very young so don't expect everything works already ...
 
+# Restrictions
+
+A normal MagicMirror setup uses a raspberry pi as hardware. If you want to run the application without output on the screen of the pi, you can run it [server only](https://docs.magicmirror.builders/getting-started/installation.html#usage) and open MagicMirror with a web browser.
+
+As the most k8s clusters are not running on raspberry pi's, here the `server only` setup of MagicMirror is used.
+
+> ❌ This implies that no modules can be used which need raspberry pi specific hardware (e.g. GPIO).
+
 # Prerequisites
 
 * Running Kubernetes Cluster
@@ -50,8 +58,9 @@ The following table lists the configurable parameters of the MagicMirror chart a
 | `imagePullPolicy`                     | Image pull policy                                                            | `Always`                                       |
 | `ingress.enabled`                     | Flag for enabling ingress                                                    | false                                          |
 | `ingress.type`                        | traefik or nginx                                                             | `traefik`                                      |
-| `ingress.tls`                         | Flag for enabling tls                                                        | false                                          |
+| `ingress.hostname`                    | hostname running MagicMirror                                                 |                                                |
 | `ingress.path`                        | subPath running MagicMirror                                                  | `/mm`                                          |
+| `ingress.tls`                         | Flag for enabling tls                                                        | false                                          |
 | `service.type`                        | service type                                                                 | `ClusterIP`                                    |
 | `service.port`                        | service port                                                                 | `8080`                                         |
 | `env`                                 | list of environment variables                                                | `TZ`                                           |
@@ -61,7 +70,8 @@ The following table lists the configurable parameters of the MagicMirror chart a
 For overriding variables see: [Customizing the chart](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing)
 
 The current setup uses [traefik](https://github.com/containous/traefik-helm-chart) as ingress, for using nginx-ingress you have to change `ingress.type`.
-You can also run without ingress, the you have to disable ingress (`ingress.enabled=false`) and setup the service as `LoadBalancer`, see example in `values.yaml`.
+You can also run without ingress, then you have to disable ingress (`ingress.enabled=false`) and setup the service as `LoadBalancer`, see example in `values.yaml`.
+With the default setup your MagicMirror ist running under `http://<your-ip-address-or-hostname>/mm/`.
 
 # MagicMirror configuration: Config, Modules, and custom CSS
 
