@@ -29,7 +29,8 @@ spec:
         checksum/config: {{ include (print $.Template.BasePath "/config.yaml") . | sha256sum }}
     spec:
       serviceAccountName: {{ template "magicmirror.fullname" . }}
-      terminationGracePeriodSeconds: 60
+      securityContext:
+{{ toYaml .Values.securityContext | indent 8 }}
       volumes:
       - name: modules
         emptyDir: {}

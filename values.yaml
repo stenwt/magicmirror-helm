@@ -6,6 +6,12 @@ replicaCount: 1
 # This will use the default deployment strategy unless it is overriden
 deploymentStrategy: {}
 
+# Set security context for MagicMirror pod
+securityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  runAsGroup: 1000
+
 # if running without ingress:
 # run service as loadbalancer, your can access your MagicMirror under 192.168.0.38:8080
 # service:
