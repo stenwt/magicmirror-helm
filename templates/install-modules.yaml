@@ -11,16 +11,13 @@ metadata:
 data:
   install_modules.sh: |-
     cd /opt/magic_mirror/modules
-    {{ range $index, $val := .Values.modules.install }}echo {{ $val | quote }} >> modules.txt
+    {{ range $index, $val := .Values.modules.install }}
+    echo installig {{ $val | quote }}
+    git clone {{ $val | quote }}
+    folder=$(echo {{ $val | quote }} | sed -r 's|.*\/(.*)|\1|g' | xargs)
+    cd $folder
+    npm install --only=production || true
+    cd ..
     {{ end }}
-    while read mod; do
-      echo installig "$mod"
-      git clone "$mod"
-      folder=$(echo $mod | sed -r 's|.*\/(.*)|\1|g' | xargs)
-      cd $folder
-      npm install --only=production || true
-      cd ..
-    done < modules.txt
-    rm modules.txt
     ls -la
 {{- end }}
