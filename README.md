@@ -47,12 +47,10 @@ $ helm delete magicmirror
 
 # Configuration
 
-The following table lists the configurable parameters of the MagicMirror chart and their default values.
+The following table lists the configurable parameters of the MagicMirror chart and their default values. Some default values which are present in every deployment are omitted.
 
 | Parameter                             | Description                                                                  | Default                                        |
 | ------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------- |
-| `replicaCount`                        | Number of replicas deployed                                                  | `1`                                            |
-| `deploymentStrategy`                  | Deployment strategy                                                          | `{}`                                           |
 | `image`                               | image with tag                                                               | `karsten13/magicmirror:alpine`                 |
 | `imagePullPolicy`                     | Image pull policy                                                            | `Always`                                       |
 | `ingress.enabled`                     | Flag for enabling ingress                                                    | false                                          |
@@ -62,9 +60,10 @@ The following table lists the configurable parameters of the MagicMirror chart a
 | `ingress.tls`                         | Flag for enabling tls                                                        | false                                          |
 | `service.type`                        | service type                                                                 | `ClusterIP`                                    |
 | `service.port`                        | service port                                                                 | `8080`                                         |
-| `env`                                 | list of environment variables                                                | `TZ`                                           |
+| `env`                                 | list of environment variables                                                | `[]`                                           |
 | `modules.install`                     | list of (foreign) modules to install                                         | `[]`                                           |
-| `config.file`                         | location of `config.js` file                                                 | `config/config.js`                             |
+| `config`                              | the config part of MagicMirror, part of `config.js` file                     | content of default `config.js` file            |
+| `css`                                 | custom css, normally defined in `custom.css` file                            | empty                                          |
 | `persistence.enabled`                 | enables persistent volume for modules                                        | false                                          |
 
 For overriding variables see: [Customizing the chart](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing)
@@ -75,14 +74,16 @@ With the default setup your MagicMirror ist running under `http://<your-ip-addre
 
 # MagicMirror configuration: Config, custom CSS and Modules
 
-The subfolder `config` contains the `config.js`, you find more information [here](https://docs.magicmirror.builders/getting-started/configuration.html#general).
+The configuration normally found in a `config.js` is done in the `values.yaml` in the `config` section. You find more information [here](https://docs.magicmirror.builders/getting-started/configuration.html#general).
 
-The subfolder `css` contains the `custom.css` file, which you can use to override your modules' appearance. CSS basics are documented
+The css configuration normally found in a `custom.css` file is done in the `values.yaml` in the `css` section. This is used to override your modules' appearance. CSS basics are documented
 [here](https://forum.magicmirror.builders/topic/6808/css-101-getting-started-with-css-and-understanding-how-css-works), among many other places.
 
-Foreign modules are installed by editing the `modules.install` section in `values.yaml`, the default modules are described [here](https://docs.magicmirror.builders/modules/introduction.html).
+Foreign modules are installed by editing the `modules.install` section in the `values.yaml`, the default modules are described [here](https://docs.magicmirror.builders/modules/introduction.html).
 
-An example with foreign modules is provided in the `example.yaml`. It contains 2 foreign modules, [MyCovid19](https://github.com/sdetweil/MyCovid19) will run out of the box, [MMM-DarkSkyForecast](https://github.com/jclarke0000/MMM-DarkSkyForecast) needs an api key (without it remains in `loading ...` state). You find a corresponding config in `config/config.js.example`.
+It is a good idea to not edit the `values.yaml` but bring your own yaml file with your changes only as in the following example.
+
+The [`example.yaml`](./example.yaml) has a default config without the weather modules and 2 foreign modules.
 
 For starting with this example use `helm upgrade magicmirror -i -f example.yaml .`.
 

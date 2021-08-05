@@ -1,12 +1,91 @@
-config:
-  file: "config/config.js.example"
-
 # List of modules to install.
 # For example:
 modules:
   install:
-    - "https://github.com/jclarke0000/MMM-DarkSkyForecast"
-    - "https://github.com/sdetweil/MyCovid19"
+    - "https://gitlab.com/khassel/MMM-RepoStats"
+    - "https://github.com/jalibu/MMM-RAIN-MAP"
 
-secrets:
-  darkSkyApi: replace-me-with-real-api-key
+config: |
+  language: "de",
+  locale: "de-DE",
+  logLevel: ["INFO", "LOG", "WARN", "ERROR"], // Add "DEBUG" for even more logging
+  timeFormat: 24,
+  units: "metric",
+  modules: [
+    {
+      module: "MMM-RepoStats",
+      position: "top_right",
+      config: {
+        repoList: [
+          "karsten13/magicmirror",
+          "karsten13/mmpm",
+          "library/node",
+          "library/traefik",
+        ],
+      },
+    },
+    {
+      module: "MMM-RAIN-MAP",
+      position: "top_right",
+      config: {
+        animationSpeed: 600,
+        height: "420px",
+        width: "420px",
+        map: "OSM",
+        lat: 50.17659,
+        lng: 8.62685,
+        mapTypeId: "terrain",
+        markers: [{ lat: 50.17659, lng: 8.62685, color: "black" }],
+        osmMapUrl: "https://tiles.wmflabs.org/bw-mapnik/${z}/${x}/${y}.png",
+        opacity: 0.75,
+        showClockSymbol: false,
+        updateIntervalInSeconds: 300,
+        zoom: 8,
+        zoomOutEach: 2,
+        zoomOutLevel: 2,
+      }
+    },
+    {
+      module: "alert",
+    },
+    {
+      module: "updatenotification",
+      position: "top_bar"
+    },
+    {
+      module: "clock",
+      position: "top_left"
+    },
+    {
+      module: "calendar",
+      header: "US Holidays",
+      position: "top_left",
+      config: {
+        calendars: [
+          {
+            symbol: "calendar-check",
+            url: "webcal://www.calendarlabs.com/ical-calendar/ics/76/US_Holidays.ics"					}
+        ]
+      }
+    },
+    {
+      module: "compliments",
+      position: "lower_third"
+    },
+    {
+      module: "newsfeed",
+      position: "bottom_bar",
+      config: {
+        feeds: [
+          {
+            title: "New York Times",
+            url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+          }
+        ],
+        showSourceTitle: true,
+        showPublishDate: true,
+        broadcastNewsFeeds: true,
+        broadcastNewsUpdates: true
+      }
+    },
+  ]
