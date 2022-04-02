@@ -1,9 +1,5 @@
 {{- if and (.Values.ingress.enabled) (eq .Values.ingress.type "nginx") }}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" }}
-apiVersion: networking.k8s.io/v1beta1
-{{ else }}
-apiVersion: extensions/v1beta1
-{{ end }}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ template "magicmirror.fullname" . }}
@@ -28,9 +24,12 @@ spec:
       http:
         paths:
           - path: {{ .Values.ingress.path}}/(.*)
+            pathType: Prefix
             backend:
-              serviceName: {{ template "magicmirror.fullname" . }}
-              servicePort: {{ .Values.service.port }}
+              service:
+                name: {{ template "magicmirror.fullname" . }}
+                port: 
+                  number: {{ .Values.service.port }}
   {{- if .Values.ingress.tls }}
   tls:
 {{ toYaml .Values.ingress.tls | indent 4 }}
